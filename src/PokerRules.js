@@ -1,9 +1,9 @@
-function PokerRules() {
-    var HIGH_CARD = 'high card';
-}
+var Rank = require('../src/Rank.js');
+
+function PokerRules() {}
 
 PokerRules.prototype.rankHand = function(hand) {
-   return this.HIGH_CARD;
+   return Rank.HIGH_CARD;
 };
 
 module.exports = PokerRules;
