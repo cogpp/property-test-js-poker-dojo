@@ -6,11 +6,14 @@ PokerRules.prototype.rankHand = function(hand) {
    var sortedValues = hand.map( function(card){ return card.value }).sort(sortNumber).reverse();
    var isStraight = this.isConsecutive(sortedValues);
    var isFlush = new Set(hand.map( function(card){ return card.suit })).size == 1;
-   var freqOfValues = this.groupByFrequencyOfCardValues(sortedValues);
+   var frequencyMapOfValues = this.groupByFrequencyOfCardValues(sortedValues);
+   var frequencies = Object.values(frequencyMapOfValues)
    if (isStraight && isFlush) {
       return Rank.STRAIGHT_FLUSH;
-   } else if (Object.values(freqOfValues).includes(4)) {
+   } else if (frequencies.includes(4)) {
       return Rank.FOUR_OF_A_KIND;
+   } else if (frequencies.includes(3) && frequencies.includes(2)) {
+       return Rank.FULL_HOUSE;
    }
    return -1;
 };
@@ -19,7 +22,7 @@ PokerRules.prototype.rankHand = function(hand) {
 PokerRules.prototype.groupByFrequencyOfCardValues = function (cardValues) {
     var valueTally = {};
     cardValues.forEach( function (value) { if (value in valueTally) valueTally[value] ++; else valueTally[value] = 1; } );
-    return valueTally;
+    return Object.values(valueTally);
 };
 
 PokerRules.prototype.isConsecutive = function (cardValues) {
