@@ -25,8 +25,9 @@ PokerRules.prototype.rankHand = function(hand) {
        return Rank.TWO_PAIR;
    } else if (frequencies.includes(2) && Utils.filterForItemInArray(frequencies, 2).length == 1) {
        return Rank.PAIR;
+   } else {
+       return Rank.HIGHEST_CARD;
    }
-   return -1;
 };
 
 

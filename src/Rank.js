@@ -8,5 +8,6 @@ Rank.STRAIGHT = 4;
 Rank.THREE_OF_A_KIND = 5;
 Rank.TWO_PAIR = 6;
 Rank.PAIR = 7;
+Rank.HIGHEST_CARD = 8;
 
 module.exports = Rank;
