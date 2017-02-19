@@ -107,8 +107,21 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
             hand.push(new Card(cardValues[2], otherSuits[1]));
             hand.push(new Card(cardValues[3], otherSuits[2]));
             var result = new PokerRules().rankHand(hand);
-            console.log(hand)
             assert(result === Rank.PAIR);
+        })
+    });
+
+    it('high card', function() {
+        qc.forAll(fiveDistinctCardValues, fiveSuits, function(cardValues, suits) {
+            if (!allTheSameSuits(suits) && !Utils.isConsecutive(cardValues)) {
+                var hand = [];
+                var suitIndex = 0;
+                cardValues.forEach(function (value) {
+                    hand.push(new Card(value, suits[suitIndex++]))
+                });
+                var result = new PokerRules().rankHand(hand);
+                assert(result === Rank.HIGHEST_CARD);
+            }
         })
     });
 
@@ -130,13 +143,4 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     var twoSuits = qc.arrayOf(suitGenerator, {length: 2});
     var threeSuits = qc.arrayOf(suitGenerator, {length: 3});
     var fiveSuits = qc.arrayOf(suitGenerator, {length: 5});
-
-    // var twoDifferentCardValues = function() {
-    //     var cardValue1 = cardValueGenerator
-    //     var cardValue2 = qc.except(cardValueGenerator, cardValue1)
-    //     return [cardValue1, cardValue2]
-    // }
-
-    // var cardGenerator = qc.constructor(Card, valueGenerator,  suitGenerator);
-    // var fiveDistinctCardValues  = qc.array.subsetOf([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], {length: 5});
 });
