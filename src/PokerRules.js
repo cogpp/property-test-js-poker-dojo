@@ -17,6 +17,8 @@ PokerRules.prototype.rankHand = function(hand) {
        return Rank.FULL_HOUSE;
    } else if (isFlush) {
        return Rank.FLUSH;
+   } else if (isStraight) {
+       return Rank.STRAIGHT;
    }
    return -1;
 };
