@@ -10,6 +10,10 @@ Utils.isConsecutive = function (cardValues) {
     return true;
 };
 
+Utils.filterForItemInArray = function(array, item) {
+    return array.filter( function(a) { return a == item })
+};
+
 function sortNumber(a,b) {
     return a - b;
 }
