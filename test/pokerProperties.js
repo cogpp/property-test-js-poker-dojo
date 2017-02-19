@@ -69,6 +69,7 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
         })
     });
 
+    //TODO find a better way to assign the card values
     it('three of a kind', function() {
         qc.forAll(cardValueGenerator, twoDistinctCardValues, threeDistinctSuits, twoSuits, function(toakValue, otherValues, toakSuits, otherSuits) {
             if (!otherValues.includes(toakValue)) {
@@ -97,6 +98,20 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
         })
     });
 
+    it('a pair', function() {
+        qc.forAll(fourDistinctCardValues, twoDistinctSuits, threeSuits, function(cardValues, pairSuits, otherSuits) {
+            var hand = [];
+            hand.push(new Card(cardValues[0], pairSuits[0]));
+            hand.push(new Card(cardValues[0], pairSuits[1]));
+            hand.push(new Card(cardValues[1], otherSuits[0]));
+            hand.push(new Card(cardValues[2], otherSuits[1]));
+            hand.push(new Card(cardValues[3], otherSuits[2]));
+            var result = new PokerRules().rankHand(hand);
+            console.log(hand)
+            assert(result === Rank.PAIR);
+        })
+    });
+
 
     function allTheSameSuits(suits) {
         return new Set(suits).size == 1;
@@ -108,10 +123,12 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     var suitGenerator =  qc.pick(PokerRules.suits);// //TODO qc.pick(Suit.CLUBS, Suit.HEARTS, Suit.SPADES, Suit.DIAMOND);
     var threeDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 3});//TODO put in a method
     var twoDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 2});
-    var fiveDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 5});
     var twoDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 2});
     var threeDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 3});
+    var fourDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 4});
+    var fiveDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 5});
     var twoSuits = qc.arrayOf(suitGenerator, {length: 2});
+    var threeSuits = qc.arrayOf(suitGenerator, {length: 3});
     var fiveSuits = qc.arrayOf(suitGenerator, {length: 5});
 
     // var twoDifferentCardValues = function() {
