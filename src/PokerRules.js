@@ -19,6 +19,8 @@ PokerRules.prototype.rankHand = function(hand) {
        return Rank.FLUSH;
    } else if (isStraight) {
        return Rank.STRAIGHT;
+   } else if (frequencies.includes(3)) {
+       return Rank.THREE_OF_A_KIND;
    }
    return -1;
 };
