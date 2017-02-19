@@ -8,7 +8,7 @@ PokerRules.prototype.rankHand = function(hand) {
    var isStraight = Utils.isConsecutive(values);
    var isFlush = new Set(hand.map( function(card){ return card.suit })).size == 1;
    var frequencyMapOfValues = this.groupByFrequencyOfCardValues(values);
-   var frequencies = Object.values(frequencyMapOfValues)
+   var frequencies = Object.values(frequencyMapOfValues);
    if (isStraight && isFlush) {
       return Rank.STRAIGHT_FLUSH;
    } else if (frequencies.includes(4)) {
@@ -21,6 +21,8 @@ PokerRules.prototype.rankHand = function(hand) {
        return Rank.STRAIGHT;
    } else if (frequencies.includes(3)) {
        return Rank.THREE_OF_A_KIND;
+   } else if (frequencies.includes(2) && Utils.filterForItemInArray(frequencies, 2).length == 2) {
+       return Rank.TWO_PAIR;
    }
    return -1;
 };

@@ -70,17 +70,30 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     });
 
     it('three of a kind', function() {
-        qc.forAll(cardValueGenerator, twoDistinctCardValues, fiveSuits, function(toakValue, otherValues, suits) {
+        qc.forAll(cardValueGenerator, twoDistinctCardValues, threeDistinctSuits, twoSuits, function(toakValue, otherValues, toakSuits, otherSuits) {
             if (!otherValues.includes(toakValue)) {
                 var hand = [];
-                hand.push(new Card(toakValue, suits[0]));
-                hand.push(new Card(toakValue, suits[1]));
-                hand.push(new Card(toakValue, suits[2]));
-                hand.push(new Card(otherValues[0], suits[3]));
-                hand.push(new Card(otherValues[1], suits[4]));
+                hand.push(new Card(toakValue, toakSuits[0]));
+                hand.push(new Card(toakValue, toakSuits[1]));
+                hand.push(new Card(toakValue, toakSuits[2]));
+                hand.push(new Card(otherValues[0], otherSuits[0]));
+                hand.push(new Card(otherValues[1], otherSuits[1]));
                 var result = new PokerRules().rankHand(hand);
                 assert(result === Rank.THREE_OF_A_KIND);
             }
+        })
+    });
+
+    it('two pair', function() {
+        qc.forAll(threeDistinctCardValues, twoDistinctSuits, twoDistinctSuits, suitGenerator, function(cardValues, firstPairSuits, secondPairSuits, otherSuit) {
+            var hand = [];
+            hand.push(new Card(cardValues[0], firstPairSuits[0]));
+            hand.push(new Card(cardValues[0], firstPairSuits[1]));
+            hand.push(new Card(cardValues[1], secondPairSuits[0]));
+            hand.push(new Card(cardValues[1], secondPairSuits[1]));
+            hand.push(new Card(cardValues[2], otherSuit));
+            var result = new PokerRules().rankHand(hand);
+            assert(result === Rank.TWO_PAIR);
         })
     });
 
@@ -93,10 +106,12 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     var cardValueGenerator = qc.pick(cardValues);
     var topCardValueInAStraight = qc.pick(6, 7, 8, 9, 10, 11, 12, 13, 14);//TODO range
     var suitGenerator =  qc.pick(PokerRules.suits);// //TODO qc.pick(Suit.CLUBS, Suit.HEARTS, Suit.SPADES, Suit.DIAMOND);
-    var threeDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 3});
+    var threeDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 3});//TODO put in a method
     var twoDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 2});
     var fiveDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 5});
     var twoDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 2});
+    var threeDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 3});
+    var twoSuits = qc.arrayOf(suitGenerator, {length: 2});
     var fiveSuits = qc.arrayOf(suitGenerator, {length: 5});
 
     // var twoDifferentCardValues = function() {

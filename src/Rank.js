@@ -6,5 +6,6 @@ Rank.FULL_HOUSE = 2;
 Rank.FLUSH = 3;
 Rank.STRAIGHT = 4;
 Rank.THREE_OF_A_KIND = 5;
+Rank.TWO_PAIR = 6;
 
 module.exports = Rank;
