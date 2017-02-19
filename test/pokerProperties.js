@@ -8,17 +8,20 @@ var qc = require("quick_check");
 var assert = require('assert');
 
 describe("The Poker Hand Ranking should be able to recognise", function () {
-
-    it('a high card', function() {
-        qc.forAll(cardGenerator, function(card) {
-            console.log(card);
-            var hand = new Hand(card, card, card, card, card);
+    it('a straight flush', function() {
+        qc.forAll(topCardValueInAStraight, suitGenerator, function(topValue, suit) {
+            var hand = [];
+            for (var i = 0; i < 5; i++) {
+                hand.push(new Card(topValue-i,suit))
+            }
             var result = new PokerRules().rankHand(hand);
-            console.log(result);
-            assert(result === Rank.HIGH_CARD);
+            assert(result === Rank.STRAIGHT_FLUSH);
         })
     });
 
+
+    var topCardValueInAStraight = qc.pick(6, 7, 8, 9, 10, 11, 12, 13, 14);//TODO range
     var suitGenerator =  qc.pick('D','H','C','S');// //TODO qc.pick(Suit.CLUBS, Suit.HEARTS, Suit.SPADES, Suit.DIAMOND);
-    var cardGenerator = qc.constructor(Card, qc.pick(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),  suitGenerator);
+    // var cardGenerator = qc.constructor(Card, valueGenerator,  suitGenerator);
+    // var fiveDistinctCardValues  = qc.array.subsetOf([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], {length: 5});
 });
