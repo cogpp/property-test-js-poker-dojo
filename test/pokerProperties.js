@@ -20,13 +20,25 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     });
 
     it('four of a kind', function() {
-        qc.forAll(cardValueGenerator, cardValueGenerator, suitGenerator, function(value1, value2, suit) {
-            if (value1 != value2) {
+        qc.forAll(cardValueGenerator, cardValueGenerator, suitGenerator, function(foakValue, otherValue, suit) {
+            if (foakValue != otherValue) {
                 var hand = [];
-                PokerRules.suits.forEach( function(suit){ hand.push(new Card(value1, suit)) });
-                hand.push(new Card(value2, suit));
+                PokerRules.suits.forEach( function(suit){ hand.push(new Card(foakValue, suit)) });
+                hand.push(new Card(otherValue, suit));
                 var result = new PokerRules().rankHand(hand);
                 assert(result === Rank.FOUR_OF_A_KIND);
+            }
+        })
+    });
+
+    it('a full house', function() {
+        qc.forAll(cardValueGenerator, cardValueGenerator, threeDistinctSuits, twoDistinctSuits, function(toakValue, pairValue, toakSuits, pairSuits) {
+            if (toakValue != pairValue) {
+                var hand = [];
+                toakSuits.forEach( function(suit){ hand.push(new Card(toakValue, suit)) });
+                pairSuits.forEach( function(suit){ hand.push(new Card(pairValue, suit)) });
+                var result = new PokerRules().rankHand(hand);
+                assert(result === Rank.FULL_HOUSE);
             }
         })
     });
@@ -35,6 +47,8 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     var cardValueGenerator = qc.pick(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14);
     var topCardValueInAStraight = qc.pick(6, 7, 8, 9, 10, 11, 12, 13, 14);//TODO range
     var suitGenerator =  qc.pick(PokerRules.suits);// //TODO qc.pick(Suit.CLUBS, Suit.HEARTS, Suit.SPADES, Suit.DIAMOND);
+    var threeDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 3});
+    var twoDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 2});
     var fiveSuitGenerator = qc.arrayOf(suitGenerator, {length: 5});
     // var twoDifferentCardValues = function() {
     //     var cardValue1 = cardValueGenerator
