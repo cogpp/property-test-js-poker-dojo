@@ -23,6 +23,8 @@ PokerRules.prototype.rankHand = function(hand) {
        return Rank.THREE_OF_A_KIND;
    } else if (frequencies.includes(2) && Utils.filterForItemInArray(frequencies, 2).length == 2) {
        return Rank.TWO_PAIR;
+   } else if (frequencies.includes(2) && Utils.filterForItemInArray(frequencies, 2).length == 1) {
+       return Rank.PAIR;
    }
    return -1;
 };
