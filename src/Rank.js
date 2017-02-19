@@ -1,6 +1,5 @@
 function Rank() {}
 
-Rank.HIGH_CARD = 0
-Rank.PAIR = 1
+Rank.STRAIGHT_FLUSH = 0
 
 module.exports = Rank;
