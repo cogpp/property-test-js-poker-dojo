@@ -1,7 +1,7 @@
 function Utils() {}
 
-Utils.isConsecutive = function (cardValues) {
-    var orderedValues = cardValues.sort(sortNumber).reverse()
+Utils.valuesInArrayAreConsecutive = function (cardValues) {
+    var orderedValues = cardValues.sort(sortNumber).reverse();
     for (var i = 0; i < orderedValues.length-1; i++) {
         if (orderedValues[i] - orderedValues[i+1] != 1) {
             return false;
@@ -10,7 +10,7 @@ Utils.isConsecutive = function (cardValues) {
     return true;
 };
 
-Utils.filterForItemInArray = function(array, item) {
+Utils.filterArrayByItem = function(array, item) {
     return array.filter( function(a) { return a == item })
 };
 
