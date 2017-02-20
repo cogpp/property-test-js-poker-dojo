@@ -83,11 +83,11 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
 
     it('two pair', function() {
         qc.forAll(threeDistinctCardValues, twoDistinctSuits, twoDistinctSuits, suitGenerator, function(cardValues, firstPairSuits, secondPairSuits, otherSuit) {
+            var firstPairValue = cardValues[0];
+            var secondPairValue = cardValues[1];
             var hand = [];
-            hand.push(new Card(cardValues[0], firstPairSuits[0]));
-            hand.push(new Card(cardValues[0], firstPairSuits[1]));
-            hand.push(new Card(cardValues[1], secondPairSuits[0]));
-            hand.push(new Card(cardValues[1], secondPairSuits[1]));
+            firstPairSuits.forEach( function(suit) { hand.push(new Card(firstPairValue, suit ))});
+            secondPairSuits.forEach( function(suit) { hand.push(new Card(secondPairValue, suit ))});
             hand.push(new Card(cardValues[2], otherSuit));
             var result = new PokerRules().rankHand(hand);
             assert(result === Rank.TWO_PAIR);
@@ -96,9 +96,9 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
 
     it('a pair', function() {
         qc.forAll(fourDistinctCardValues, twoDistinctSuits, threeSuits, function(cardValues, pairSuits, otherSuits) {
+            var pairValue = cardValues[0];
             var hand = [];
-            hand.push(new Card(cardValues[0], pairSuits[0]));
-            hand.push(new Card(cardValues[0], pairSuits[1]));
+            pairSuits.forEach( function(suit) { hand.push(new Card(pairValue, suit ))});
             hand.push(new Card(cardValues[1], otherSuits[0]));
             hand.push(new Card(cardValues[2], otherSuits[1]));
             hand.push(new Card(cardValues[3], otherSuits[2]));
