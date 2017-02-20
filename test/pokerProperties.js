@@ -46,7 +46,7 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
 
     it('a flush', function() {
         qc.forAll(fiveDistinctCardValues, suitGenerator, function(cardValues, suit) {
-            if (!Utils.isConsecutive(cardValues)) {
+            if (!Utils.valuesInArrayAreConsecutive(cardValues)) {
                 var hand = [];
                 cardValues.forEach( function(cardValue){ hand.push(new Card(cardValue, suit)) });
                 var result = new PokerRules().rankHand(hand);
@@ -113,7 +113,7 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
 
     it('high card', function() {
         qc.forAll(fiveDistinctCardValues, fiveSuits, function(cardValues, suits) {
-            if (!allTheSameSuits(suits) && !Utils.isConsecutive(cardValues)) {
+            if (!allTheSameSuits(suits) && !Utils.valuesInArrayAreConsecutive(cardValues)) {
                 var hand = [];
                 var suitIndex = 0;
                 cardValues.forEach(function (value) {

@@ -4,8 +4,8 @@ var Utils = require('./Utils.js');
 function PokerRules() {}
 
 PokerRules.prototype.rankHand = function(hand) {
-   var values = hand.map( function(card){ return card.value })
-   var isStraight = Utils.isConsecutive(values);
+   var values = hand.map( function(card){ return card.value });
+   var isStraight = Utils.valuesInArrayAreConsecutive(values);
    var isFlush = new Set(hand.map( function(card){ return card.suit })).size == 1;
    var frequencyMapOfValues = this.groupByFrequencyOfCardValues(values);
    var frequencies = Object.values(frequencyMapOfValues);
@@ -21,9 +21,9 @@ PokerRules.prototype.rankHand = function(hand) {
        return Rank.STRAIGHT;
    } else if (frequencies.includes(3)) {
        return Rank.THREE_OF_A_KIND;
-   } else if (frequencies.includes(2) && Utils.filterForItemInArray(frequencies, 2).length == 2) {
+   } else if (frequencies.includes(2) && Utils.filterArrayByItem(frequencies, 2).length == 2) {
        return Rank.TWO_PAIR;
-   } else if (frequencies.includes(2) && Utils.filterForItemInArray(frequencies, 2).length == 1) {
+   } else if (frequencies.includes(2) && Utils.filterArrayByItem(frequencies, 2).length == 1) {
        return Rank.PAIR;
    } else {
        return Rank.HIGHEST_CARD;
