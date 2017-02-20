@@ -60,9 +60,8 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
         qc.forAll(topCardValueInAStraight, fiveSuits, function(topValue, suits) {
             if (!Utils.allItemsInArrayAreTheSame(suits)) {
                 var hand = [];
-                for (var i = 0; i < 5; i++) {
-                    hand.push(new Card(topValue-i, suits[i]))
-                }
+                var i = 0;
+                suits.forEach( function(suit) { hand.push(new Card(topValue - i--, suit)) });
                 var result = new PokerRules().rankHand(hand);
                 assert(result === Rank.STRAIGHT);
             }
