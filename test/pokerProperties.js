@@ -21,26 +21,26 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     });
 
     it('four of a kind', function() {
-        qc.forAll(cardValueGenerator, cardValueGenerator, suitGenerator, function(foakValue, otherValue, suit) {
-            if (foakValue != otherValue) {
-                var hand = [];
-                PokerRules.suits.forEach( function(suit){ hand.push(new Card(foakValue, suit)) });
-                hand.push(new Card(otherValue, suit));
-                var result = new PokerRules().rankHand(hand);
-                assert(result === Rank.FOUR_OF_A_KIND);
-            }
+        qc.forAll(twoDistinctCardValues, suitGenerator, function(values, suit) {
+            var foakValue = values[0];
+            var otherValue = values[1];
+            var hand = [];
+            PokerRules.suits.forEach( function(suit){ hand.push(new Card(foakValue, suit)) });
+            hand.push(new Card(otherValue, suit));
+            var result = new PokerRules().rankHand(hand);
+            assert(result === Rank.FOUR_OF_A_KIND);
         })
     });
 
     it('a full house', function() {
-        qc.forAll(cardValueGenerator, cardValueGenerator, threeDistinctSuits, twoDistinctSuits, function(toakValue, pairValue, toakSuits, pairSuits) {
-            if (toakValue != pairValue) {
-                var hand = [];
-                toakSuits.forEach( function(suit){ hand.push(new Card(toakValue, suit)) });
-                pairSuits.forEach( function(suit){ hand.push(new Card(pairValue, suit)) });
-                var result = new PokerRules().rankHand(hand);
-                assert(result === Rank.FULL_HOUSE);
-            }
+        qc.forAll(twoDistinctCardValues, threeDistinctSuits, twoDistinctSuits, function(values, toakSuits, pairSuits) {
+            var toakValue = values[0];
+            var pairValue = values[1];
+            var hand = [];
+            toakSuits.forEach( function(suit){ hand.push(new Card(toakValue, suit)) });
+            pairSuits.forEach( function(suit){ hand.push(new Card(pairValue, suit)) });
+            var result = new PokerRules().rankHand(hand);
+            assert(result === Rank.FULL_HOUSE);
         })
     });
 
@@ -131,8 +131,8 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     }
 
     var cardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-    var cardValueGenerator = qc.pick(cardValues);
-    var topCardValueInAStraight = qc.pick(6, 7, 8, 9, 10, 11, 12, 13, 14);//TODO range
+    var cardValueGenerator = qc.int.between(1, 14);
+    var topCardValueInAStraight = qc.int.between(6, 14);
     var suitGenerator =  qc.pick(PokerRules.suits);// //TODO qc.pick(Suit.CLUBS, Suit.HEARTS, Suit.SPADES, Suit.DIAMOND);
     var threeDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 3});//TODO put in a method
     var twoDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 2});
