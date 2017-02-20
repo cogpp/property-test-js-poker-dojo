@@ -69,19 +69,15 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
         })
     });
 
-    //TODO find a better way to assign the card values
     it('three of a kind', function() {
-        qc.forAll(cardValueGenerator, twoDistinctCardValues, threeDistinctSuits, twoSuits, function(toakValue, otherValues, toakSuits, otherSuits) {
-            if (!otherValues.includes(toakValue)) {
-                var hand = [];
-                hand.push(new Card(toakValue, toakSuits[0]));
-                hand.push(new Card(toakValue, toakSuits[1]));
-                hand.push(new Card(toakValue, toakSuits[2]));
-                hand.push(new Card(otherValues[0], otherSuits[0]));
-                hand.push(new Card(otherValues[1], otherSuits[1]));
-                var result = new PokerRules().rankHand(hand);
-                assert(result === Rank.THREE_OF_A_KIND);
-            }
+        qc.forAll(threeDistinctCardValues, threeDistinctSuits, twoSuits, function(values, toakSuits, otherSuits) {
+            var toakValue = values[0];
+            var hand = [];
+            toakSuits.forEach( function(suit) { hand.push(new Card(toakValue, suit)) }  );
+            hand.push(new Card(values[1], otherSuits[0]));
+            hand.push(new Card(values[2], otherSuits[1]));
+            var result = new PokerRules().rankHand(hand);
+            assert(result === Rank.THREE_OF_A_KIND);
         })
     });
 
