@@ -127,9 +127,9 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
         })
     });
 
-    var cardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-    var cardValueGenerator = qc.int.between(1, 14);
-    var topCardValueInAStraight = qc.int.between(6, 14);
+    var cardValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+    var cardValueGenerator = qc.pick(cardValues);
+    var topCardValueInAStraight = qc.pick([6, 7, 8, 9, 10, 11, 12, 13, 14]);
     var suitGenerator =  qc.pick(PokerRules.suits);// //TODO qc.pick(Suit.CLUBS, Suit.HEARTS, Suit.SPADES, Suit.DIAMOND);
     var threeDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 3});//TODO put in a method
     var twoDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 2});
