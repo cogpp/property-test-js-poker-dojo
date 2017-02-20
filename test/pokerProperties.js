@@ -118,6 +118,15 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
         })
     });
 
+    it('that all cards values can be ranked', function() {
+        qc.forAll(handGenerator, function(hand) {
+            if (Utils.arrayContainsDuplicateItems(hand)) {
+                var result = new PokerRules().rankHand(hand);
+                assert(Rank.validRanks.includes(result));
+            }
+        })
+    });
+
     var cardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
     var cardValueGenerator = qc.int.between(1, 14);
     var topCardValueInAStraight = qc.int.between(6, 14);
@@ -131,4 +140,6 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     var twoSuits = qc.arrayOf(suitGenerator, {length: 2});
     var threeSuits = qc.arrayOf(suitGenerator, {length: 3});
     var fiveSuits = qc.arrayOf(suitGenerator, {length: 5});
+    var cardGenerator = qc.constructor(Card, cardValueGenerator, suitGenerator);
+    var handGenerator = qc.arrayOf(cardGenerator, {length: 5});
 });

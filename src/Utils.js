@@ -18,6 +18,15 @@ Utils.allItemsInArrayAreTheSame = function(array) {
     return new Set(array).size == 1;
 };
 
+Utils.arrayContainsDuplicateItems = function(array) {
+    for (var i =0; i < array.length; i++) {
+        for ( var j=0; j < array.length && j != i; j++ ) {
+            if (JSON.stringify(array[i]) === JSON.stringify(array[j])) return false;
+        }
+    }
+    return true;
+};
+
 function sortNumber(a,b) {
     return a - b;
 }
