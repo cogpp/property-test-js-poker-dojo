@@ -73,7 +73,7 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
         qc.forAll(threeDistinctCardValues, threeDistinctSuits, twoSuits, function(values, toakSuits, otherSuits) {
             var toakValue = values[0];
             var hand = [];
-            toakSuits.forEach( function(suit) { hand.push(new Card(toakValue, suit)) }  );
+            toakSuits.forEach( function(suit) { hand.push(new Card(toakValue, suit)) });
             hand.push(new Card(values[1], otherSuits[0]));
             hand.push(new Card(values[2], otherSuits[1]));
             var result = new PokerRules().rankHand(hand);
@@ -86,8 +86,8 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
             var firstPairValue = cardValues[0];
             var secondPairValue = cardValues[1];
             var hand = [];
-            firstPairSuits.forEach( function(suit) { hand.push(new Card(firstPairValue, suit ))});
-            secondPairSuits.forEach( function(suit) { hand.push(new Card(secondPairValue, suit ))});
+            firstPairSuits.forEach( function(suit) { hand.push(new Card(firstPairValue, suit )) });
+            secondPairSuits.forEach( function(suit) { hand.push(new Card(secondPairValue, suit )) });
             hand.push(new Card(cardValues[2], otherSuit));
             var result = new PokerRules().rankHand(hand);
             assert(result === Rank.TWO_PAIR);
@@ -112,9 +112,7 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
             if (!Utils.allItemsInArrayAreTheSame(suits) && !Utils.valuesInArrayAreConsecutive(cardValues)) {
                 var hand = [];
                 var suitIndex = 0;
-                cardValues.forEach(function (value) {
-                    hand.push(new Card(value, suits[suitIndex++]))
-                });
+                cardValues.forEach(function (value) { hand.push(new Card(value, suits[suitIndex++])) });
                 var result = new PokerRules().rankHand(hand);
                 assert(result === Rank.HIGHEST_CARD);
             }
