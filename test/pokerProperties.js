@@ -131,16 +131,24 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     var cardValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
     var cardValueGen = qc.pick(cardValues);
     var topCardValueInAStraightGen = qc.pick([6, 7, 8, 9, 10, 11, 12, 13, 14]);
-    var suitGen =  qc.pick(PokerRules.suits);// //TODO qc.pick(Suit.CLUBS, Suit.HEARTS, Suit.SPADES, Suit.DIAMOND);
-    var threeDistinctSuitsGen  = qc.array.subsetOf(PokerRules.suits, {length: 3});//TODO put in a method
-    var twoDistinctSuitsGen  = qc.array.subsetOf(PokerRules.suits, {length: 2});
-    var twoDistinctCardValuesGen  = qc.array.subsetOf(cardValues, {length: 2});
-    var threeDistinctCardValuesGen  = qc.array.subsetOf(cardValues, {length: 3});
-    var fourDistinctCardValuesGen  = qc.array.subsetOf(cardValues, {length: 4});
-    var fiveDistinctCardValuesGen  = qc.array.subsetOf(cardValues, {length: 5});
+    var suitGen =  qc.pick(PokerRules.suits);
+    var threeDistinctSuitsGen = createGenForNDistinctSuits(3);
+    var twoDistinctSuitsGen = createGenForNDistinctSuits(2);
+    var twoDistinctCardValuesGen = createGenForNDistinctCards(2);
+    var threeDistinctCardValuesGen = createGenForNDistinctCards(3);
+    var fourDistinctCardValuesGen = createGenForNDistinctCards(4);
+    var fiveDistinctCardValuesGen = createGenForNDistinctCards(5);
     var twoSuitsGen = qc.arrayOf(suitGen, {length: 2});
     var threeSuitsGen = qc.arrayOf(suitGen, {length: 3});
     var fiveSuitsGen = qc.arrayOf(suitGen, {length: 5});
     var cardGen = qc.constructor(Card, cardValueGen, suitGen);
     var handGen = qc.arrayOf(cardGen, {length: 5});
+
+    function createGenForNDistinctSuits(n) {
+        return qc.array.subsetOf(PokerRules.suits, {length: n});
+    }
+
+    function createGenForNDistinctCards(n) {
+        return qc.array.subsetOf(cardValues, {length: n});
+    }
 });
