@@ -10,7 +10,7 @@ var assert = require('assert');
 
 describe("The Poker Hand Ranking should be able to recognise", function () {
     it('a straight flush', function() {
-        qc.forAll(topCardValueInAStraight, suitGenerator, function(topValue, suit) {
+        qc.forAll(topCardValueInAStraightGen, suitGen, function(topValue, suit) {
             var hand = [];
             for (var i = 0; i < 5; i++) {
                 hand.push(new Card(topValue-i, suit))
@@ -21,31 +21,31 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     });
 
     it('four of a kind', function() {
-        qc.forAll(cardValueGenerator, cardValueGenerator, suitGenerator, function(foakValue, otherValue, suit) {
-            if (foakValue != otherValue) {
-                var hand = [];
-                PokerRules.suits.forEach( function(suit){ hand.push(new Card(foakValue, suit)) });
-                hand.push(new Card(otherValue, suit));
-                var result = new PokerRules().rankHand(hand);
-                assert(result === Rank.FOUR_OF_A_KIND);
-            }
+        qc.forAll(twoDistinctCardValuesGen, suitGen, function(values, suit) {
+            var foakValue = values[0];
+            var otherValue = values[1];
+            var hand = [];
+            PokerRules.suits.forEach( function(suit){ hand.push(new Card(foakValue, suit)) });
+            hand.push(new Card(otherValue, suit));
+            var result = new PokerRules().rankHand(hand);
+            assert(result === Rank.FOUR_OF_A_KIND);
         })
     });
 
     it('a full house', function() {
-        qc.forAll(cardValueGenerator, cardValueGenerator, threeDistinctSuits, twoDistinctSuits, function(toakValue, pairValue, toakSuits, pairSuits) {
-            if (toakValue != pairValue) {
-                var hand = [];
-                toakSuits.forEach( function(suit){ hand.push(new Card(toakValue, suit)) });
-                pairSuits.forEach( function(suit){ hand.push(new Card(pairValue, suit)) });
-                var result = new PokerRules().rankHand(hand);
-                assert(result === Rank.FULL_HOUSE);
-            }
+        qc.forAll(twoDistinctCardValuesGen, threeDistinctSuitsGen, twoDistinctSuitsGen, function(values, toakSuits, pairSuits) {
+            var toakValue = values[0];
+            var pairValue = values[1];
+            var hand = [];
+            toakSuits.forEach( function(suit){ hand.push(new Card(toakValue, suit)) });
+            pairSuits.forEach( function(suit){ hand.push(new Card(pairValue, suit)) });
+            var result = new PokerRules().rankHand(hand);
+            assert(result === Rank.FULL_HOUSE);
         })
     });
 
     it('a flush', function() {
-        qc.forAll(fiveDistinctCardValues, suitGenerator, function(cardValues, suit) {
+        qc.forAll(fiveDistinctCardValuesGen, suitGen, function(cardValues, suit) {
             if (!Utils.valuesInArrayAreConsecutive(cardValues)) {
                 var hand = [];
                 cardValues.forEach( function(cardValue){ hand.push(new Card(cardValue, suit)) });
@@ -57,41 +57,36 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
 
 
     it('a straight', function() {
-        qc.forAll(topCardValueInAStraight, fiveSuits, function(topValue, suits) {
-            if (!allTheSameSuits(suits)) {
+        qc.forAll(topCardValueInAStraightGen, fiveSuitsGen, function(topValue, suits) {
+            if (!Utils.allItemsInArrayAreTheSame(suits)) {
                 var hand = [];
-                for (var i = 0; i < 5; i++) {
-                    hand.push(new Card(topValue-i, suits[i]))
-                }
+                var i = 0;
+                suits.forEach( function(suit) { hand.push(new Card(topValue - i--, suit)) });
                 var result = new PokerRules().rankHand(hand);
                 assert(result === Rank.STRAIGHT);
             }
         })
     });
 
-    //TODO find a better way to assign the card values
     it('three of a kind', function() {
-        qc.forAll(cardValueGenerator, twoDistinctCardValues, threeDistinctSuits, twoSuits, function(toakValue, otherValues, toakSuits, otherSuits) {
-            if (!otherValues.includes(toakValue)) {
-                var hand = [];
-                hand.push(new Card(toakValue, toakSuits[0]));
-                hand.push(new Card(toakValue, toakSuits[1]));
-                hand.push(new Card(toakValue, toakSuits[2]));
-                hand.push(new Card(otherValues[0], otherSuits[0]));
-                hand.push(new Card(otherValues[1], otherSuits[1]));
-                var result = new PokerRules().rankHand(hand);
-                assert(result === Rank.THREE_OF_A_KIND);
-            }
+        qc.forAll(threeDistinctCardValuesGen, threeDistinctSuitsGen, twoSuitsGen, function(values, toakSuits, otherSuits) {
+            var toakValue = values[0];
+            var hand = [];
+            toakSuits.forEach( function(suit) { hand.push(new Card(toakValue, suit)) });
+            hand.push(new Card(values[1], otherSuits[0]));
+            hand.push(new Card(values[2], otherSuits[1]));
+            var result = new PokerRules().rankHand(hand);
+            assert(result === Rank.THREE_OF_A_KIND);
         })
     });
 
     it('two pair', function() {
-        qc.forAll(threeDistinctCardValues, twoDistinctSuits, twoDistinctSuits, suitGenerator, function(cardValues, firstPairSuits, secondPairSuits, otherSuit) {
+        qc.forAll(threeDistinctCardValuesGen, twoDistinctSuitsGen, twoDistinctSuitsGen, suitGen, function(cardValues, firstPairSuits, secondPairSuits, otherSuit) {
+            var firstPairValue = cardValues[0];
+            var secondPairValue = cardValues[1];
             var hand = [];
-            hand.push(new Card(cardValues[0], firstPairSuits[0]));
-            hand.push(new Card(cardValues[0], firstPairSuits[1]));
-            hand.push(new Card(cardValues[1], secondPairSuits[0]));
-            hand.push(new Card(cardValues[1], secondPairSuits[1]));
+            firstPairSuits.forEach( function(suit) { hand.push(new Card(firstPairValue, suit )) });
+            secondPairSuits.forEach( function(suit) { hand.push(new Card(secondPairValue, suit )) });
             hand.push(new Card(cardValues[2], otherSuit));
             var result = new PokerRules().rankHand(hand);
             assert(result === Rank.TWO_PAIR);
@@ -99,10 +94,10 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     });
 
     it('a pair', function() {
-        qc.forAll(fourDistinctCardValues, twoDistinctSuits, threeSuits, function(cardValues, pairSuits, otherSuits) {
+        qc.forAll(fourDistinctCardValuesGen, twoDistinctSuitsGen, threeSuitsGen, function(cardValues, pairSuits, otherSuits) {
+            var pairValue = cardValues[0];
             var hand = [];
-            hand.push(new Card(cardValues[0], pairSuits[0]));
-            hand.push(new Card(cardValues[0], pairSuits[1]));
+            pairSuits.forEach( function(suit) { hand.push(new Card(pairValue, suit ))});
             hand.push(new Card(cardValues[1], otherSuits[0]));
             hand.push(new Card(cardValues[2], otherSuits[1]));
             hand.push(new Card(cardValues[3], otherSuits[2]));
@@ -112,35 +107,48 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
     });
 
     it('high card', function() {
-        qc.forAll(fiveDistinctCardValues, fiveSuits, function(cardValues, suits) {
-            if (!allTheSameSuits(suits) && !Utils.valuesInArrayAreConsecutive(cardValues)) {
+        qc.forAll(fiveDistinctCardValuesGen, fiveSuitsGen, function(cardValues, suits) {
+            if (!Utils.allItemsInArrayAreTheSame(suits) && !Utils.valuesInArrayAreConsecutive(cardValues)) {
                 var hand = [];
                 var suitIndex = 0;
-                cardValues.forEach(function (value) {
-                    hand.push(new Card(value, suits[suitIndex++]))
-                });
+                cardValues.forEach(function (value) { hand.push(new Card(value, suits[suitIndex++])) });
                 var result = new PokerRules().rankHand(hand);
                 assert(result === Rank.HIGHEST_CARD);
             }
         })
     });
 
+    it('that all cards values can be ranked', function() {
+        qc.forAll(handGen, function(hand) {
+            if (Utils.arrayContainsDuplicateItems(hand)) {
+                var result = new PokerRules().rankHand(hand);
+                assert(Rank.validRanks.includes(result));
+            }
+        })
+    });
 
-    function allTheSameSuits(suits) {
-        return new Set(suits).size == 1;
+    //Generators
+    var cardValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+    var cardValueGen = qc.pick(cardValues);
+    var topCardValueInAStraightGen = qc.pick([6, 7, 8, 9, 10, 11, 12, 13, 14]);
+    var suitGen =  qc.pick(PokerRules.suits);
+    var threeDistinctSuitsGen = createGenForNDistinctSuits(3);
+    var twoDistinctSuitsGen = createGenForNDistinctSuits(2);
+    var twoDistinctCardValuesGen = createGenForNDistinctCards(2);
+    var threeDistinctCardValuesGen = createGenForNDistinctCards(3);
+    var fourDistinctCardValuesGen = createGenForNDistinctCards(4);
+    var fiveDistinctCardValuesGen = createGenForNDistinctCards(5);
+    var twoSuitsGen = qc.arrayOf(suitGen, {length: 2});
+    var threeSuitsGen = qc.arrayOf(suitGen, {length: 3});
+    var fiveSuitsGen = qc.arrayOf(suitGen, {length: 5});
+    var cardGen = qc.constructor(Card, cardValueGen, suitGen);
+    var handGen = qc.arrayOf(cardGen, {length: 5});
+
+    function createGenForNDistinctSuits(n) {
+        return qc.array.subsetOf(PokerRules.suits, {length: n});
     }
 
-    var cardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-    var cardValueGenerator = qc.pick(cardValues);
-    var topCardValueInAStraight = qc.pick(6, 7, 8, 9, 10, 11, 12, 13, 14);//TODO range
-    var suitGenerator =  qc.pick(PokerRules.suits);// //TODO qc.pick(Suit.CLUBS, Suit.HEARTS, Suit.SPADES, Suit.DIAMOND);
-    var threeDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 3});//TODO put in a method
-    var twoDistinctSuits  = qc.array.subsetOf(PokerRules.suits, {length: 2});
-    var twoDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 2});
-    var threeDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 3});
-    var fourDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 4});
-    var fiveDistinctCardValues  = qc.array.subsetOf(cardValues, {length: 5});
-    var twoSuits = qc.arrayOf(suitGenerator, {length: 2});
-    var threeSuits = qc.arrayOf(suitGenerator, {length: 3});
-    var fiveSuits = qc.arrayOf(suitGenerator, {length: 5});
+    function createGenForNDistinctCards(n) {
+        return qc.array.subsetOf(cardValues, {length: n});
+    }
 });
