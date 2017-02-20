@@ -14,6 +14,10 @@ Utils.filterArrayByItem = function(array, item) {
     return array.filter( function(a) { return a == item })
 };
 
+Utils.allItemsInArrayAreTheSame = function(array) {
+    return new Set(array).size == 1;
+};
+
 function sortNumber(a,b) {
     return a - b;
 }

@@ -58,7 +58,7 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
 
     it('a straight', function() {
         qc.forAll(topCardValueInAStraight, fiveSuits, function(topValue, suits) {
-            if (!allTheSameSuits(suits)) {
+            if (!Utils.allItemsInArrayAreTheSame(suits)) {
                 var hand = [];
                 for (var i = 0; i < 5; i++) {
                     hand.push(new Card(topValue-i, suits[i]))
@@ -109,7 +109,7 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
 
     it('high card', function() {
         qc.forAll(fiveDistinctCardValues, fiveSuits, function(cardValues, suits) {
-            if (!allTheSameSuits(suits) && !Utils.valuesInArrayAreConsecutive(cardValues)) {
+            if (!Utils.allItemsInArrayAreTheSame(suits) && !Utils.valuesInArrayAreConsecutive(cardValues)) {
                 var hand = [];
                 var suitIndex = 0;
                 cardValues.forEach(function (value) {
@@ -120,11 +120,6 @@ describe("The Poker Hand Ranking should be able to recognise", function () {
             }
         })
     });
-
-
-    function allTheSameSuits(suits) {
-        return new Set(suits).size == 1;
-    }
 
     var cardValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
     var cardValueGenerator = qc.int.between(1, 14);
