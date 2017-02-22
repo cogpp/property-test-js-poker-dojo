@@ -8,7 +8,7 @@ var Utils = require('../src/Utils.js');
 var qc = require("quick_check");
 var assert = require('assert');
 
-describe("The Poker Hand Ranking should be able to recognise", function () {
+describe("The Poker Rules should be able to rank", function () {
     it('a straight flush', function() {
         qc.forAll(topCardValueInAStraightGen, suitGen, function(topValue, suit) {
             var hand = [];
