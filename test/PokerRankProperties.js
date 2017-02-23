@@ -8,6 +8,18 @@ var qc = require("quick_check");
 var assert = require('assert');
 
 describe("The Poker Rules should", function () {
+
+    it('only accept a 5 card hand', function () {
+        qc.forAll(multiCardGen, function (hand) {
+            if (hand.length == 5) {
+                var result = new PokerRules().rankHand(hand);
+                assert(Rank.validRanks.includes(result));
+            } else {
+                assert.throws(function() {  new PokerRules().rankHand(hand) }, Error, "Incorrect number of cards "+hand.length);
+            }
+        })
+    });
+
     it('rank a straight flush', function() {
         qc.forAll(topCardValueInAStraightGen, suitGen, function(topValue, suit) {
             var hand = [];
@@ -122,17 +134,6 @@ describe("The Poker Rules should", function () {
             if (Utils.arrayContainsDuplicateItems(hand)) {
                 var result = new PokerRules().rankHand(hand);
                 assert(Rank.validRanks.includes(result));
-            }
-        })
-    });
-
-    it('only accept a 5 card hand', function () {
-        qc.forAll(multiCardGen, function (hand) {
-            if (hand.length == 5) {
-                var result = new PokerRules().rankHand(hand);
-                assert(Rank.validRanks.includes(result));
-            } else {
-                assert.throws(function() {  new PokerRules().rankHand(hand) }, Error, "Incorrect number of cards "+hand.length);
             }
         })
     });
