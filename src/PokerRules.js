@@ -4,6 +4,9 @@ var Utils = require('./Utils.js');
 function PokerRules() {}
 
 PokerRules.prototype.rankHand = function(hand) {
+   if (hand.length != 5) {
+       throw new Error("Incorrect number of cards "+hand.length)
+   }
    var values = hand.map( function(card){ return card.value });
    var isStraight = Utils.valuesInArrayAreConsecutive(values);
    var isFlush = new Set(hand.map( function(card){ return card.suit })).size == 1;
