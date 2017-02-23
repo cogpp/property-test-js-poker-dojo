@@ -21,10 +21,10 @@ Utils.allItemsInArrayAreTheSame = function(array) {
 Utils.arrayContainsDuplicateItems = function(array) {
     for (var i =0; i < array.length; i++) {
         for ( var j=0; j < array.length && j != i; j++ ) {
-            if (JSON.stringify(array[i]) === JSON.stringify(array[j])) return false;
+            if (JSON.stringify(array[i]) === JSON.stringify(array[j])) return true;
         }
     }
-    return true;
+    return false;
 };
 
 function sortNumber(a,b) {
