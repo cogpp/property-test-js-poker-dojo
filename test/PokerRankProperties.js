@@ -138,8 +138,7 @@ describe("The Poker Rules should", function () {
     });
 
     //Generators
-    var cardValues = PokerRules.values;
-    var cardValueGen = qc.pick(cardValues);
+    var cardValueGen = qc.pick(PokerRules.values);
     var topCardValueInAStraightGen = qc.pick([6, 7, 8, 9, 10, 11, 12, 13, 14]);
     var suitGen =  qc.pick(PokerRules.suits);
     var threeDistinctSuitsGen = createGenForNDistinctSuits(3);
@@ -163,6 +162,6 @@ describe("The Poker Rules should", function () {
     }
 
     function createGenForNDistinctCards(n) {
-        return qc.array.subsetOf(cardValues, {length: n});
+        return qc.array.subsetOf(PokerRules.values, {length: n});
     }
 });
