@@ -10,12 +10,24 @@ describe("Card should", function () {
                 var card = new Card(cardValue, char);
                 assert(card.getSuit() === char);
             } else {
-                assert.throws(function() { new Card(cardValue, char) }, Error, "Invalid suit");
+                assert.throws(function() { new Card(cardValue, char) }, Error, "Invalid suit "+char);
             }
         })
     });
 
-    var cardValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-    var cardValueGen = qc.pick(cardValues);
-    var charGen = qc.char
+    it('only accept valid values', function () {
+        qc.forAll(valueGen, suitGen, function (value, suit) {
+            if (PokerRules.values.includes(value)) {
+                var card = new Card(value, suit);
+                assert(card.getValue() === value);
+            } else {
+                assert.throws(function() { new Card(value, suit) }, Error, "Invalid value "+value);
+            }
+        })
+    });
+
+    var cardValueGen = qc.pick(PokerRules.values);
+    var suitGen = qc.pick(PokerRules.suits);
+    var charGen = qc.oneOf(qc.char, suitGen);
+    var valueGen = qc.oneOf(qc.int, cardValueGen);
 });

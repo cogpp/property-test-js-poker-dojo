@@ -61,7 +61,7 @@ describe("The Poker Rules should be able to rank", function () {
             if (!Utils.allItemsInArrayAreTheSame(suits)) {
                 var hand = [];
                 var i = 0;
-                suits.forEach( function(suit) { hand.push(new Card(topValue - i--, suit)) });
+                suits.forEach( function(suit) { hand.push(new Card(topValue - i++, suit)) });
                 var result = new PokerRules().rankHand(hand);
                 assert(result === Rank.STRAIGHT);
             }
@@ -128,7 +128,7 @@ describe("The Poker Rules should be able to rank", function () {
     });
 
     //Generators
-    var cardValues = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+    var cardValues = PokerRules.values;
     var cardValueGen = qc.pick(cardValues);
     var topCardValueInAStraightGen = qc.pick([6, 7, 8, 9, 10, 11, 12, 13, 14]);
     var suitGen =  qc.pick(PokerRules.suits);
