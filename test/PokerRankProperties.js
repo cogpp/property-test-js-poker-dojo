@@ -55,13 +55,13 @@ describe("The Poker Rules should", function () {
     //Generators
     var cardValueGen = qc.pick(PokerRules.values);
     var suitGen =  qc.pick(PokerRules.suits);
-    var topCardValueInAStraightGen;//TODO generator to bring back the highest card value in a random straight hand
-    var cardGen;//TODO generator for a new Card
-    var handLengthGen;//TODO generator to return both valid and invalid card lengths
+    var topCardValueInAStraightGen;//TODO Step 3. generator to bring back the highest card value in a random straight hand
+    var cardGen;//TODO Step 1. generator for a new Card
+    var handLengthGen;//TODO Step 2. generator to return both valid and invalid card lengths
     var multiCardGen = qc.arrayOf(cardGen, {length: handLengthGen});
     var twoDistinctCardValuesGen = createGenForNDistinctCardValues(2);
 
     function createGenForNDistinctCardValues(n) {
-        //TODO return a generator for n length array of card values where each value is different
+        //TODO Step 4. return a generator for n length array of card values where each value is different
     }
 });
