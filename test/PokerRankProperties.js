@@ -57,8 +57,8 @@ describe("The Poker Rules should", function () {
     var suitGen =  qc.pick(PokerRules.suits);
     var topCardValueInAStraightGen;//TODO Step 3. generator to bring back the highest card value in a random straight hand
     var cardGen;//TODO Step 1. generator for a new Card
-    var handLengthGen;//TODO Step 2. generator to return both valid and invalid card lengths
-    var multiCardGen = qc.arrayOf(cardGen, {length: handLengthGen});
+    var handLengthGen = qc.oneOf(qc.pick(0, 5), qc.int);
+    var multiCardGen//TODO Step 2. Using handLengthGen, define a generator that will return varing numbers of Cards
     var twoDistinctCardValuesGen = createGenForNDistinctCardValues(2);
 
     function createGenForNDistinctCardValues(n) {
