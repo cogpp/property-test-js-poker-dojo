@@ -55,13 +55,15 @@ describe("The Poker Rules should", function () {
     //Generators
     var cardValueGen = qc.pick(PokerRules.values);
     var suitGen =  qc.pick(PokerRules.suits);
-    var topCardValueInAStraightGen;//TODO Step 3. generator to bring back the highest card value in a random straight hand
-    var cardGen;//TODO Step 1. generator for a new Card
+
+    var cardGen = qc.constructor(Card,cardValueGen,suitGen);
+    var topCardValueInAStraightGen = qc.except(cardValueGen,2,3,4,5);
     var handLengthGen = qc.oneOf(qc.pick(0, 5), qc.int);
-    var multiCardGen//TODO Step 2. Using handLengthGen, define a generator that will return varing numbers of Cards
+    var multiCardGen = qc.arrayOf(cardGen,handLengthGen);
     var twoDistinctCardValuesGen = createGenForNDistinctCardValues(2);
 
+
     function createGenForNDistinctCardValues(n) {
-        //TODO Step 4. return a generator for n length array of card values where each value is different
+        return qc.array.subsetOf(PokerRules.values, {length: n})
     }
 });
